@@ -156,8 +156,17 @@ Gradient Boosting classifier  - http://scikit-learn.org/stable/modules/generated
 
 Note that we'll use a the sklearn MinMaxscaler function to scale the data as SVM needs scaled feature dataset.
 
+#### Selection of feature 
+
+In order to select the feature, we'll use recursive feature elimination (RFE). 
+
+This Scikit Learn function automatically select the best features as well as the number of features:
+more on : http://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.RFECV.html#sklearn.feature_selection.RFECV.fit_transform 
+
+
 #### Parameter Tuning:
-The following GridSearchCV as been used to setup the values for the GradientBoostingClassifier:
+
+In order to tune the algorithm, GridSearchCV has been used to search the effect of specific values for the GradientBoostingClassifier:
 
 param_grid = {'n_estimators': [50,500], 'learning_rate': [0.05,0.1,0.2], 'criterion': ['mae'], 'max_depth': [1,2,3,4,5,6,7,8,9,10,15,40]}
 clfCV= GridSearchCV(svr, param_grid)
@@ -168,6 +177,17 @@ https://stackoverflow.com/questions/45151043/extract-best-pipeline-from-gridsear
 
 ### 4 Evaluation
 
+In order to evaluate the algorithm, the data has been split into a training and test set. The algorithm learns based on the Train set and is then validated against the test sets.
+
+Evaluation of the performance of the approach is performed using the Accuracy, the Precision and the Recall. An aggregation of these measures are available in the F1 score.
+
+Note that for this project the data is imbalanced (there is way more normal people than POI), and algorithm tends to be biased towards the majority of the case (here Non POI).
+
+One way to correct this is to used SMOTE, Synthetic Minority Oversampling TEchnique http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.118.3416&rep=rep1&type=pdf 
+
+the function can be installed via imblearn.over_sampling  
+
+Below are reports on different classifier that I've tested. For each classifier are provided the parameters used and the performance achieved.
 
 #### Evaluation: The GB classifier results: 
  

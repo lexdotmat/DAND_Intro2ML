@@ -97,25 +97,13 @@ for key, value in data_dict.items():
 ### features_list is a list of strings, each of which is a feature name.
 ### The first feature must be "poi".
 
-# features_list = [ 'poi', 'salary', 'deferral_payments', 'total_payments', 'loan_advances', 'bonus', 'restricted_stock_deferred',
-        #                 'deferred_income', 'total_stock_value', 'expenses', 'exercised_stock_options', 'other', 'long_term_incentive',
-        #         'restricted_stock', 'director_fees', 'is_director', 'to_messages', 'from_poi_to_this_person', 'from_messages',
-    #         'from_this_person_to_poi', 'shared_receipt_with_poi']
 
 features_list = [ 'poi',  'bonus', 'restricted_stock_deferred',
                  'deferred_income', 'expenses', 'exercised_stock_options', 'other',
-                 'restricted_stock', 'director_fees', 'is_director', 'to_messages', 'from_poi_to_this_person', 'from_messages',
+                 'restricted_stock', 'director_fees', 'is_director',
+                  'to_messages', 'from_poi_to_this_person', 'from_messages',
                  'from_this_person_to_poi', 'shared_receipt_with_poi']
-# features_list = [ 'poi', 'salary', 'deferral_payments', 'bonus',
-#                 'deferred_income', 'total_stock_value', 'expenses', 'exercised_stock_options', 'other', 'long_term_incentive',
-#                 'restricted_stock',  'to_messages', 'from_poi_to_this_person', 'from_messages',
-#                 'from_this_person_to_poi', 'shared_receipt_with_poi']
-#features_list = [ 'poi',  'total_payments', 'bonus', 'is_director' ,
-#                 'deferred_income', 'total_stock_value', 'expenses', 'exercised_stock_options',
-#                 'restricted_stock','shared_receipt_with_poi']
 
-
-# Excluded email features:
 # Text string: 'email_address', 'to_messages' 'from_messages'
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -132,7 +120,7 @@ my_dataset = data_dict
 
 data = featureFormat(my_dataset, features_list, sort_keys = True)
 
-from imblearn.over_sampling import SMOTE, ADASYN
+from imblearn.over_sampling import SMOTE
 labels, features = targetFeatureSplit(data)
 features_resampled, labels_resampled = SMOTE().fit_sample(features, labels)
 # features = scaler.fit_transform(features)
@@ -146,8 +134,11 @@ from sklearn.metrics import classification_report
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_selection import RFECV
 print "RandomForestClassifier "
+# RFECV:  Select the algorithm to train with:
 clf_Ranking = RFECV(GradientBoostingClassifier(random_state=0, learning_rate= 0.05, max_depth=1), scoring='accuracy', n_jobs = -1)
-clf_Ranking.fit(features_train, labels_train)
+# RFECV: Fit and transform the RFECV function
+clf_Ranking.fit_transform(features_train, labels_train)
+
 print clf_Ranking.score(features_train, labels_train)
 print clf_Ranking.ranking_
 # result of feature selection : [ 1 13  4 14  1 12 11  8  1  9  5  6  1  2 10  7  3  1]
